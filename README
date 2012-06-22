@@ -1,0 +1,32 @@
+This is a set of python 2.6 scripts for importing official UCB course
+information into a departmental Drupal web site. The scripts are based
+on a prototype kindly contributed by Prof. Jim Pitman
+(http://math.berkeley.edu/people/faculty/james-pitman). The original
+Drupal import module was written by Amit Asaravala
+(http://returncontrol.com/).
+
+There are two sources of course data: course catalog and course
+schedule. Here is an example of course catalog for the department of
+Mathematics:
+
+http://osoc.berkeley.edu/catalog/gcc_search_sends_request?p_dept_cd=MATH
+
+Similarly, here is an example of Fall 2012 course schedule for the
+department of Mathematics:
+
+http://osoc.berkeley.edu/OSOC/osoc?p_term=FL&p_dept=MATH&p_start_row=1
+
+The scripts get the catalog and schedule data from the web and produce a
+CSV spreadsheet suitable for importing to a Drupal CMS. Here is a list
+of courses from the above two sources on the Math department web site:
+
+http://math.berkeley.edu/courses/offerings/fall-semester
+
+Note a JavaScript button on the right side above the course list. It
+allows to switch the view from list to table format and vice versa.
+
+Each course is a full Drupal node that can be assigned to and edited by
+an instructor. See e.g. this course page:
+
+http://math.berkeley.edu/courses/offerings/fall-2012-math-h1b-001-lec
+
