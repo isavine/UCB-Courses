@@ -20,12 +20,16 @@ def get_all_courses(baseurl, params, pipecmd):
         lines = f.readlines()
         f.close()
         # match summary line
-        r = r'^ *Displaying (\d+)-(\d+) of (\d+) matches to your request for (\w+) (\d{4,4}): *\n'
-        m = re.match(r, lines[5])
+        i = 0
+        r = r'Displaying (\d+)-(\d+) of (\d+) matches to your request for (\w+) (\d{4,4}):'
+        m = None
+        while not m:
+            m = re.match(r, lines[i].strip())
+            i += 1
         #print m.groups()
         (start, end, total, term, year) = m.group(1,2,3,4,5)
         (start, end, total) = (int(start), int(end), int(total))
-        courses += get_courses(lines[6:])
+        courses += get_courses(lines[i:])
         start = end + 1
     for c in courses:
         c = strip_links(c)
