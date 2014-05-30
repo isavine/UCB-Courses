@@ -14,16 +14,6 @@ def read_page(baseurl, params, pipecmd):
     lines = f.readlines()
     f.close()
     fields = []
-    # read summary lines
-    m = re.match(r'^ *There were (\d+) matches to your request:', lines[9])
-    if m:
-        total = int(m.group(1))
-    else:
-        print 'No courses found -- verify your search request!'
-        exit(2)
-    m = re.match(r'^ *\((.*)\)', lines[10])
-    comment = m.group(1)
-    comment = ' '.join(comment.split()[1:])
     for l in lines:
         l = l.split('\n')[0]
         #print l
@@ -42,7 +32,7 @@ def read_page(baseurl, params, pipecmd):
         m = re.match(r'^ *\((F|SP|F,SP)\)$', l)
         if m:
             fields += [('Semesters', m.group(1))]
-    return (total, comment, fields)
+    return fields
 
 def split_course_info(course_field_value):
     title, rest = course_field_value.split('  --  ')
@@ -57,7 +47,7 @@ def split_course_info(course_field_value):
 def get_catalog(baseurl, params, pipecmd):
     courses = []
     course = {}
-    (total, comment, fields) = read_page(baseurl, params, pipecmd)
+    fields = read_page(baseurl, params, pipecmd)
     for k, v in fields:
         if k == 'Course' and course:
             courses += [course]
@@ -68,10 +58,7 @@ def get_catalog(baseurl, params, pipecmd):
     #print len(courses)
     for c in courses:
         c['Course'] = split_course_info(c['Course'])
-    if total != len(courses):
-        print 'The number of parsed courses ' + str(len(courses)) + ' does not match the web total ' + str(total) + '!'
-        exit(1)
-    comment = str(total) + ' courses matched ' + comment
+    comment = str(len(courses)) + ' courses matched'
     return {'Comment': comment, 'Courses': courses}
 
 if __name__ == '__main__':
