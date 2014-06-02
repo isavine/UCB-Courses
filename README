@@ -17,7 +17,7 @@ department of Mathematics:
 http://osoc.berkeley.edu/OSOC/osoc?p_term=FL&p_dept=MATH&p_start_row=1
 
 The scripts get the catalog and schedule data from the web and produce a
-CSV spreadsheet suitable for importing to a Drupal CMS. Here is a list
+CSV spreadsheet suitable for importing to Drupal CMS. Here is a list
 of courses from the above two sources on the Math department web site:
 
 http://math.berkeley.edu/courses/offerings/fall-semester
@@ -28,4 +28,4 @@ allows to switch the view from list to table format and vice versa.
 Each course is a full Drupal node that can be assigned to and edited by
 an instructor. See e.g. this course page:
 
-http://math.berkeley.edu/courses/offerings/fall-2014-math-1b-002-lec
+http://math.berkeley.edu/courses/offerings/fall-2014-math-h1b-001-lec
