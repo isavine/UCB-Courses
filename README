@@ -11,7 +11,7 @@ Mathematics:
 
 http://osoc.berkeley.edu/catalog/gcc_search_sends_request?p_dept_cd=MATH
 
-Similarly, here is an example of Fall 2013 course schedule for the
+Similarly, here is an example of Fall 2014 course schedule for the
 department of Mathematics:
 
 http://osoc.berkeley.edu/OSOC/osoc?p_term=FL&p_dept=MATH&p_start_row=1
@@ -28,4 +28,4 @@ allows to switch the view from list to table format and vice versa.
 Each course is a full Drupal node that can be assigned to and edited by
 an instructor. See e.g. this course page:
 
-http://math.berkeley.edu/courses/offerings/fall-2013-math-1b-002-lec
+http://math.berkeley.edu/courses/offerings/fall-2014-math-1b-002-lec
