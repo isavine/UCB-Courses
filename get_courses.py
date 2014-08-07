@@ -116,7 +116,8 @@ def format_schedule(schedule_url, sched_params, course):
     for k in keys:
         if k in course and course[k]:
             html += '<p class="course-data"><strong>' + str(k) + ':</strong>&nbsp;' + str(course[k]) + '</p>'
-    return html
+    # escape dollar sign to avoid collision with MathJax
+    return html.replace('$', '\$')
 
 def format_notes(course):
     html = ''
