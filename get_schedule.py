@@ -34,6 +34,7 @@ def get_all_courses(baseurl, params, pipecmd):
     for c in courses:
         c = strip_links(c)
         c['Course'] = split_course_info(c['Course'])
+        #print c['Course']
     if total != len(courses):
         print 'The number of parsed courses ' + str(len(courses)) + ' does not match the web total ' +  str(total) +'!'
         exit(1)
