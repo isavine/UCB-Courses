@@ -10,16 +10,22 @@ def aggregate(courses):
         c = courses[i]
         if c['Course']['Type'] == 'P':
             i += 1
-            p = c
-            n = c['Course']['Number']
-            m = c['Course']['Section'][-1]
             c['Sections'] = []
-        elif c['Course']['Type'] == 'S' and c['Course']['Number'] == n and c['Course']['Section'][0] == m:
-            p['Sections'] += [c]
-            courses.remove(c)
-        else:
-            c['Sections'] = []
-            i += 1
+            #print c['Course']
+            continue
+        if c['Course']['Type'] == 'S':
+            # lookup primary course (p)
+            j = i
+            while j > 0:
+                j -= 1
+                p = courses[j]
+                n = p['Course']['Number']
+                m = p['Course']['Section'][-1]
+                if c['Course']['Number'] == n and c['Course']['Section'][0] == m:
+                    p['Sections'] += [c]
+                    courses.remove(c)
+                    break
+            continue
     return courses
 
 def add_catalog_info(courses, catalog):
