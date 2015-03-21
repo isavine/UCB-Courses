@@ -5,27 +5,22 @@ import get_schedule
 import get_catalog
 
 def aggregate(courses):
-    i = 0
-    while i < len(courses):
-        c = courses[i]
+    keys = [c['Course']['Sort Key'] for c in courses]
+    dc = dict(zip(keys, courses))
+    for k in sorted(keys):
+        c = dc[k]
         if c['Course']['Type'] == 'P':
-            i += 1
-            c['Sections'] = []
-            #print c['Course']
-            continue
-        if c['Course']['Type'] == 'S':
-            # lookup primary course (p)
-            j = i
-            while j > 0:
-                j -= 1
-                p = courses[j]
-                n = p['Course']['Number']
-                m = p['Course']['Section'][-1]
-                if c['Course']['Number'] == n and c['Course']['Section'][0] == m:
-                    p['Sections'] += [c]
-                    courses.remove(c)
-                    break
-            continue
+           dc[k] = c
+        elif c['Course']['Type'] == 'S':
+           pk = k[:-2].ljust(11,'0')
+           if pk in dc:
+              if not 'Sections' in dc[pk]:
+                  dc[pk]['Sections'] = []
+              dc[pk]['Sections'] += [c]
+              del dc[k]
+        else:
+           raise Exception, 'Unknown course type'
+    courses = [dc[k] for k in sorted(dc.keys())] 
     return courses
 
 def add_catalog_info(courses, catalog):
@@ -140,6 +135,7 @@ def output_course(schedule_url, sched_params, course):
     o = {}
     o['Course Number'] = course['Course']['Number']
     o['Section'] = course['Course']['Section'] + ' ' + course['Course']['Kind']
+    o['Sort Key'] = course['Course']['Sort Key']
     o['Course Title'] = course['Course Title']
     try: o['Days/Time'], o['Location'] = course['Location'].split(',')
     except: 
@@ -149,7 +145,10 @@ def output_course(schedule_url, sched_params, course):
     o['Instructor'] = course['Instructor']
     o['Course Control Number'] = course['Course Control Number']
     o['Schedule Info'] = format_schedule(schedule_url, sched_params, course)
-    o['Sections'] = format_sections(schedule_url, sched_params, course['Sections'])
+    if 'Sections' in course:
+        o['Sections'] = format_sections(schedule_url, sched_params, course['Sections'])
+    else:
+        o['Sections'] = ''
     o['Notes'] = format_notes(course)
     return o
 
@@ -177,13 +176,14 @@ if __name__ == '__main__':
     # text browser pipe command
     pipecmd = 'w3m -dump -no-cookie -cols 500'
     # output keys
-    keys = ['Course Number', 'Section', 'Course Title', 'Days/Time', 'Location',
+    keys = ['Course Number', 'Section', 'Sort Key', 'Course Title', 'Days/Time', 'Location',
             'Instructor', 'Course Control Number', 'Schedule Info', 'Sections', 'Notes']
     # Output file
     f = open(options.file, 'wb')
     
     schedule = get_schedule.get_all_courses(schedule_url, sched_params, pipecmd)
-    courses = aggregate(schedule['Courses'])
+    courses = schedule['Courses']
+    courses = aggregate(courses)
     catalog = get_catalog.get_catalog(catalog_url, cat_params, pipecmd)
     courses = add_catalog_info(courses, catalog)
 
