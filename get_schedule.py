@@ -34,10 +34,10 @@ def get_all_courses(baseurl, params, pipecmd):
     for c in courses:
         c = strip_links(c)
         c['Course'] = split_course_info(c['Course'])
+        c = add_sort_key(c)
         #print c['Course']
     if total != len(courses):
-        print 'The number of parsed courses ' + str(len(courses)) + ' does not match the web total ' +  str(total) +'!'
-        exit(1)
+        raise Exception, 'The number of parsed courses ' + str(len(courses)) + ' does not match the web total ' +  str(total) +'!'
     comment = str(total) + ' courses matched the schedule for ' + term + ' ' + year
     return {'Comment': comment, 'Courses': courses}
 
@@ -57,6 +57,25 @@ def split_course_info(course_field_value):
     (d['Number'], d['Type'], d['Section'], d['Kind']) = course_field_value.split()[-4:]
     d['Department'] = ' '.join(course_field_value.split()[:-4])
     return d
+
+def add_sort_key(course):
+    r = r'(^\D?)(\d+)(\D*)$'
+    i = 0
+    n = course['Course']['Number']
+    m = re.match(r, n)
+    m1 = m.group(1).rjust(1, ' ')
+    m2 = m.group(2).rjust(3, '0')
+    m3 = m.group(3).ljust(2, ' ')
+    s = course['Course']['Section']
+    if course['Course']['Type'] == 'P':
+        if not '-' in s:
+            s = s.ljust(5, '0')
+        else:
+            s = s.ljust(5, ' ')
+    if course['Course']['Type'] == 'S':
+        s = s.rjust(5, '0')
+    course['Course']['Sort Key'] = m2 + m3 + m1 + s
+    return course
 
 def get_courses(lines):
     courses = []
