@@ -79,7 +79,6 @@ if __name__ == '__main__':
     pipecmd = 'w3m -dump -no-cookie -cols 500'
     # output file
     f = open(options.file, 'wb')
-
     catalog = get_catalog(baseurl, params, pipecmd)
     json.dump(catalog, f, sort_keys=True, indent=4)
     f.close()
