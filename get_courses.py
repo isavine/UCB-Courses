@@ -29,19 +29,26 @@ def add_catalog_info(courses, catalog):
         key = c['Course']['Number']
         value = {}
         if 'Description' in c:
-            value['Syllabus'] = c['Description']
+            value['Description'] = c['Description']
         else:
-            value['Syllabus'] = ''
+            value['Description'] = ''
         if 'Prerequisites' in c:
             value['Prerequisites'] = c['Prerequisites']
         else:
             value['Prerequisites'] = ''
+        if 'Grading/Final exam status' in c:
+            value['Grading'] = c['Grading/Final exam status']
+        elif 'Grading' in c:
+            value['Grading'] = c['Grading']
+        else:
+            value['Grading'] = ''
         cat_info[key] = value
     for c in courses:
         key = str(c['Course']['Number'])
         if key in cat_info:
-            c['Syllabus'] = cat_info[key]['Syllabus']
+            c['Description'] = cat_info[key]['Description']
             c['Prerequisites'] = cat_info[key]['Prerequisites']
+            c['Grading'] = cat_info[key]['Grading']
     return courses
 
 def output_section(course):
@@ -122,7 +129,7 @@ def format_schedule(schedule_url, sched_params, course):
 
 def format_notes(course):
     html = ''
-    keys = ['Prerequisites', 'Syllabus', 'Office', 'Office Hours', 'Required Text',
+    keys = ['Prerequisites', 'Description', 'Office', 'Office Hours', 'Required Text',
             'Recommended Reading', 'Grading', 'Homework', 'Course Webpage']
     for k in keys:
         if k in course and course[k]:
@@ -170,7 +177,7 @@ if __name__ == '__main__':
     # minimum set of search parameters
     sched_params = {'p_dept': options.dept, 'p_term': options.term}
     # base URL for seaching course catalog
-    catalog_url = 'http://osoc.berkeley.edu/catalog/gcc_search_sends_request?'
+    catalog_url = 'http://guide.berkeley.edu/courses'
     # minimum set of search parameters
     cat_params = {'p_dept_cd': options.dept}
     # text browser pipe command
@@ -184,7 +191,7 @@ if __name__ == '__main__':
     schedule = get_schedule.get_all_courses(schedule_url, sched_params, pipecmd)
     courses = schedule['Courses']
     courses = aggregate(courses)
-    catalog = get_catalog.get_catalog(catalog_url, cat_params, pipecmd)
+    catalog = get_catalog.get_catalog(catalog_url, options.dept)
     courses = add_catalog_info(courses, catalog)
 
     w = csv.writer(f)
