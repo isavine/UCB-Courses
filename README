@@ -20,7 +20,7 @@ The scripts get the catalog and schedule data from the web and produce a
 CSV spreadsheet suitable for importing to Drupal CMS. Here is a list
 of courses from the above two sources on the Math department web site:
 
-http://math.berkeley.edu/courses/offerings/fall-semester
+https://math.berkeley.edu/courses/offerings/fall-2015
 
 Note a JavaScript button on the right side above the course list. It
 allows to switch the view from list to table format and vice versa.
