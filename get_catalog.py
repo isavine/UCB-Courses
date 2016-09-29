@@ -41,7 +41,7 @@ def read_pipe(baseurl, dept):
             t = 2
             # go to next line
             continue
-        elif t == 2 and len(l) > 0:
+        elif t == 2 and len(l) > 0 and not l.endswith('[+]'):
             d += [l]
         elif t == 2 and len(l) == 0:
             t = 0
